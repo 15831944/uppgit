@@ -111,6 +111,12 @@ void Ide::PackageClean()
 	}
 }
 
+void Ide::PackageRebuild()
+{
+	PackageClean();
+	PackageBuild();
+}
+
 void Ide::CleanUppOut()
 {
 	String out = GetVar("OUTPUT");
