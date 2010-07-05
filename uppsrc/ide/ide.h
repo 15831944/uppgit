@@ -895,6 +895,7 @@ public:
 		void  PackageBuild();
 		void  StopBuild();
 		void  PackageClean();
+		void  PackageRebuild();
 		void  CreateMakefile();
 		void  CleanUppOut();
 		void  SwitchHeader();

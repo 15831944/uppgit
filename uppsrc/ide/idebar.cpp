@@ -409,6 +409,8 @@ void Ide::BuildPackageMenu(Bar& menu)
 		.Help("Build current package");
 	menu.Add(b, AK_CLEANPACKAGE, THISBACK(PackageClean))
 		.Help("Remove all intermediate files of the current package");
+	menu.Add(b, AK_REBUILDPACKAGE, THISBACK(PackageRebuild))
+		.Help("Rebuild of the current package");
 }
 
 void Ide::BuildMenu(Bar& menu) {
@@ -461,7 +463,7 @@ void Ide::BuildMenu(Bar& menu) {
 	          + "according to console pane");
 #if defined(PLATFORM_WIN32) || defined(PLATFORM_POSIX)
 	menu.MenuSeparator();
-	menu.Add(!IsNull(target), AK_OPENOUTDIR, THISBACK(OpenOutputFolder));
+	menu.Add(!IsNull(target), "Open output directory", IdeImg::opposite(), THISBACK(OpenOutputFolder));
 #endif
 }
 
@@ -480,7 +482,7 @@ void Ide::DebugMenu(Bar& menu)
 			.Help("Current directory, command line, stdout redirection");
 		menu.Add(b, AK_EXECUTE, IdeImg::debug_run(), THISBACK(BuildAndExecute))
 			.Help("Build and execute the application");
-		menu.Add(b, AK_DEBUG, THISBACK1(BuildAndDebug, false))
+		menu.Add(b, AK_DEBUG,  IdeImg::debug_debug(), THISBACK1(BuildAndDebug, false))
 			.Help("Build application & run debugger");
 		menu.Add(b, AK_DEBUGTO, THISBACK1(BuildAndDebug, true))
 			.Help("Build application & run to cursor in debugger");
