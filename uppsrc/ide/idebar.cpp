@@ -556,13 +556,14 @@ void Ide::MainMenu(Bar& menu) {
 void Ide::MainTool(Bar& bar)
 {
 	Edit(bar);
-	if(debugger)
-		DebugMenu(bar);
-	else
-	if(!designer)
-		bar.Separator();
+//	if(debugger)
+//		DebugMenu(bar);
+//	else
+//	if(!designer)
+//		bar.Separator();
 	Project(bar);
 	BuildMenu(bar);
+	DebugMenu(bar);
 	bar.Separator();
 	Setup(bar);
 	BrowseMenu(bar);
