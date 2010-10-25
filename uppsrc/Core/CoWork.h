@@ -1,7 +1,6 @@
 #ifdef _MULTITHREADED
 
 class CoWork : NoCopy {
-	typedef StaticCriticalSection Lock;
 
 	struct MJob : Moveable<MJob> {
 		Callback cb;
@@ -9,6 +8,7 @@ class CoWork : NoCopy {
 	};
 
 	struct Pool {
+		typedef Pool CLASSNAME;
 		Vector<MJob>    jobs;
 		int             waiting_threads;
 		Array<Thread>   threads;
@@ -19,8 +19,8 @@ class CoWork : NoCopy {
 		Pool();
 		~Pool();
 
-		static bool DoJob();
-		static void ThreadRun(int tno);
+		bool DoJob();
+		void ThreadRun(int tno);
 	};
 	
 	friend struct Pool;

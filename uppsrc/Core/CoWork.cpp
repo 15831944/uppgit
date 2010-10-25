@@ -17,7 +17,7 @@ CoWork::Pool::Pool()
 {
 	LLOG("CoWork INIT");
 	for(int i = 0; i < CPU_Cores() + 2; i++)
-		threads.Add().Run(callback1(&ThreadRun, i));
+		threads.Add().Run(THISBACK1(ThreadRun, i));
 }
 
 CoWork::Pool::~Pool()
@@ -38,18 +38,17 @@ CoWork::Pool::~Pool()
 
 bool CoWork::Pool::DoJob()
 {
-	Pool& p = pool();
-	if(p.jobs.Top().work == NULL) {
+	if(jobs.Top().work == NULL) {
 		LLOG("Quit thread");
 		return true;
 	}
-	MJob job = p.jobs.Pop();
-	p.lock.Leave();
+	MJob job = jobs.Pop();
+	lock.Leave();
 	job.cb();
-	p.lock.Enter();
-	if(--job.work->todo == 0) {
+	lock.Enter();
+	if(--job.work->todo <= 0) {
 		LLOG("Releasing waitforfinish of (CoWork " << FormatIntHex(job.work) << ")");
-		job.work->waitforfinish.Release();
+		job.work->waitforfinish.Release(); //multiple call, but semaphore cant become negative anyway
 	}
 	LLOG("Finished, remaining todo " << job.work->todo << " (CoWork " << FormatIntHex(job.work) << ")");
 	return false;
@@ -58,28 +57,26 @@ bool CoWork::Pool::DoJob()
 void CoWork::Pool::ThreadRun(int tno)
 {
 	LLOG("CoWork thread #" << tno << " started");
-	Pool& p = pool();
-	p.lock.Enter();
+	lock.Enter();
 	for(;;) {
-		while(p.jobs.GetCount() == 0) {
-			p.waiting_threads++;
-			p.lock.Leave();
+		while(jobs.GetCount() <= 0) {
+			waiting_threads++;
+			lock.Leave();
 			LLOG("#" << tno << " Waiting for job");
-			p.waitforjob.Wait();
+			waitforjob.Wait();
 			LLOG("#" << tno << " Waiting ended");
-			p.lock.Enter();
+			lock.Enter();
 		}
 		LLOG("#" << tno << " Job acquired");
 		if(DoJob())
 			break;
 		LLOG("#" << tno << " Job finished");
 	}
-	p.lock.Leave();
+	lock.Leave();
 	LLOG("CoWork thread #" << tno << " finished");
 }
 
 void CoWork::Do(Callback cb) {
-#ifdef _MULTITHREADED
 	Pool& p = pool();
 	p.lock.Enter();
 	if(p.jobs.GetCount() > 128) {
@@ -94,27 +91,22 @@ void CoWork::Do(Callback cb) {
 	p.jobs.Add(job);
 	todo++;
 	LLOG("Adding job; todo: " << todo << " (CoWork " << FormatIntHex(this) << ")");
-	if(p.waiting_threads) {
+	if(p.waiting_threads>0) {
 		LLOG("Releasing thread waiting for job: " << p.waiting_threads);
 		p.waiting_threads--;
 		p.waitforjob.Release();
 	}
 	p.lock.Leave();
-#else
-	cb();
-#endif
 }
 
 void CoWork::Finish() {
 #ifdef _MULTITHREADED
 	Pool &p = pool();
 	p.lock.Enter();
-	while(todo) {
+	while(todo>0) {
 		LLOG("Finish: todo: " << todo << " (CoWork " << FormatIntHex(this) << ")");
-		if(todo == 0)
-			break;
-		if(p.jobs.GetCount())
-			Pool::DoJob();
+		if(p.jobs.GetCount()>0)
+			p.DoJob();
 		else {
 			p.lock.Leave();
 			LLOG("WaitForFinish (CoWork " << FormatIntHex(this) << ")");
@@ -136,6 +128,7 @@ CoWork::CoWork()
 CoWork::~CoWork()
 {
 	Finish();
+	LLOG("~~~ CoWork destructed");
 }
 
 #endif
