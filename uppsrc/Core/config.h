@@ -86,7 +86,7 @@
 		#define CPU_ALIGNED 1
 		#define _HAVE_NO_STDWSTRING 1
 		//BF toolchain has no support for __thread (TLS), so U++ Heap not possible
-		#define flagUSEMALLOC
+		#define flagUSEMALLOC 1
 	#else
 		#error Unknown CPU architecture
 	#endif
