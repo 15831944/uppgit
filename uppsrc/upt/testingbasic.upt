@@ -1,0 +1,63 @@
+template "CtrlLib package + Basic Test app" main;
+
+id     "Subpackage name" subpkg;
+option "Create header" header = 1;
+option "Multithreaded" mt;
+
+@@<:PACKAGE:>.h
+??header
+#ifndef _<:PACKAGE:>_<:PACKAGE:>_h
+#define _<:PACKAGE:>_<:PACKAGE:>_h
+
+#include <CtrlLib/CtrlLib.h>
+
+using namespace Upp;
+
+<:?header:>#include <<:subpkg:>/<:subpkg:>.h>
+
+#endif
+
+@@main.cpp
+#include <:?header:>"<:PACKAGE:>.h"<:/:><CtrlLib/CtrlLib.h><:.:>
+
+GUI_APP_MAIN
+{
+}
+
+@@<:PACKAGE:>.upp
+uses
+	<:subpkg:>;
+
+file
+	<:?header:>"<:PACKAGE:>.h",<:.:>
+	"main.cpp";
+
+mainconfig
+	"" = <:?mt:>"GUI MT"<:/:>"GUI"<:.:>;
+
+@@../<:subpkg:>/<:subpkg:>.h
+#ifndef _<:subpkg:>_<:subpkg:>_h
+#define _<:subpkg:>_<:subpkg:>_h
+
+#include <CtrlLib/CtrlLib.h>
+
+using namespace Upp;
+
+
+
+#endif
+
+@@../<:subpkg:>/<:subpkg:>.cpp
+#include <:?header:>"<:subpkg:>.h"<:/:><CtrlLib/CtrlLib.h><:.:>
+
+
+@@../<:subpkg:>/<:subpkg:>.upp
+uses
+	CtrlLib;
+
+file
+	<:?header:>"<:subpkg:>.h",<:.:>
+	"<:subpkg:>.cpp";
+
+mainconfig
+	"" = "";
