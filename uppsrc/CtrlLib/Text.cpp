@@ -2,6 +2,23 @@
 
 NAMESPACE_UPP
 
+TextCtrl& TextCtrl::SetStyle(const Style& s)
+{
+	style = &s;
+	Refresh();
+	return *this;
+}
+
+CH_STYLE(TextCtrl, Style, StyleDefault)
+{
+	inknorm = SColorText;
+	inkdis = SColorDisabled;
+	inksel = SColorHighlightText;
+	papernorm = SColorPaper;
+	paperrd = SColorFace;
+	papersel = SColorHighlight;
+}
+
 TextCtrl::TextCtrl()
 {
 	Unicode();
@@ -12,15 +29,10 @@ TextCtrl::TextCtrl()
 	undo_op = false;
 	WhenBar = THISBACK(StdBar);
 	charset = CHARSET_UNICODE;
-	color[INK_NORMAL] = SColorText;
-	color[INK_DISABLED] = SColorDisabled;
-	color[INK_SELECTED] = SColorHighlightText;
-	color[PAPER_NORMAL] = SColorPaper;
-	color[PAPER_READONLY] = SColorFace;
-	color[PAPER_SELECTED] = SColorHighlight;
 	processtab = true;
 	processenter = true;
 	nobg = false;
+	style = &StyleDefault();
 }
 
 TextCtrl::~TextCtrl() {}

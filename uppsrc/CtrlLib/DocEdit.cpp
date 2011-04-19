@@ -106,7 +106,7 @@ int sSum(const int *w, int n)
 
 void DocEdit::Paint(Draw& w) {
 	Size sz = GetSize();
-	Color bg =  color[IsShowEnabled() && !IsReadOnly() ? PAPER_NORMAL : PAPER_READONLY];
+	Color bg =  IsShowEnabled() && !IsReadOnly() ? style->papernorm : style->paperrd;
 	if(nobg)
 		bg = Null;
 	int y = -sb + 1;
@@ -132,17 +132,17 @@ void DocEdit::Paint(Draw& w) {
 				int ccx = sSum(wc, c);
 				w.DrawRect(1, y, acx, fmt.fi.GetHeight(), bg);
 				w.DrawText(1, y, ~fmt.text + fmt.line[i], font,
-				           IsShowEnabled() ? color[INK_NORMAL] : color[INK_DISABLED], a, wa);
-				w.DrawRect(1 + acx, y, bcx, fmt.fi.GetHeight(), color[PAPER_SELECTED]);
-				w.DrawText(1 + acx, y, ~fmt.text + fmt.line[i] + a, font, color[INK_SELECTED], b, wb);
+				           IsShowEnabled() ? style->inknorm : style->inkdis, a, wa);
+				w.DrawRect(1 + acx, y, bcx, fmt.fi.GetHeight(), style->papersel);
+				w.DrawText(1 + acx, y, ~fmt.text + fmt.line[i] + a, font, style->inksel, b, wb);
 				w.DrawRect(1 + acx + bcx, y, ccx, fmt.fi.GetHeight(), bg);
-				w.DrawText(1 + acx + bcx, y, ~fmt.text + fmt.line[i] + a + b, font, color[INK_NORMAL], c, wc);
+				w.DrawText(1 + acx + bcx, y, ~fmt.text + fmt.line[i] + a + b, font, style->inknorm, c, wc);
 				p += n;
 				w.DrawRect(1 + acx + bcx + ccx, y, cx - (acx + bcx + ccx), fmt.fi.GetHeight(),
-				           p >= sell && p < selh ? color[PAPER_SELECTED] : bg);
+				           p >= sell && p < selh ? style->papersel : bg);
 				y += fmt.fi.GetHeight();
 			}
-			w.DrawRect(1, y, cx, after, color[PAPER_NORMAL]);
+			w.DrawRect(1, y, cx, after, style->papernorm);
 			y += after;
 		}
 		else
