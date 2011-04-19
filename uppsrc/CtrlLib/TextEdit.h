@@ -23,14 +23,13 @@ public:
 		void Clear()                     { undo.Clear(); redo.Clear(); }
 	};
 
-	enum {
-		INK_NORMAL,
-		INK_DISABLED,
-		INK_SELECTED,
-		PAPER_NORMAL,
-		PAPER_READONLY,
-		PAPER_SELECTED,
-		COLOR_COUNT,
+	struct Style : ChStyle<Style> {
+		Color inknorm;
+		Color inkdis;
+		Color inksel;
+		Color papernorm;
+		Color paperrd;
+		Color papersel;
 	};
 
 protected:
@@ -75,7 +74,7 @@ protected:
 	Point            dropcaret;
 	bool             isdrag;
 
-	Color            color[COLOR_COUNT];
+	const Style *    style;
 
 	bool             processtab, processenter;
 	bool             nobg;
@@ -174,8 +173,8 @@ public:
 	void      SetCharset(byte cs)              { charset = ResolveCharset(cs); }
 	byte      GetCharset() const               { return charset; }
 
-	void      SetColor(int i, Color c)         { color[i] = c; Refresh(); }
-	Color     GetColor(int i) const            { return color[i]; }
+	static const Style& StyleDefault();
+	TextCtrl&  SetStyle(const Style& s);
 
 	TextCtrl& UndoSteps(int n)                 { undosteps = n; Undodo(); return *this; }
 	int       GetUndoSteps() const             { return undosteps; }

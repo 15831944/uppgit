@@ -90,8 +90,8 @@ void   LineEdit::Paint0(Draw& w) {
 		int len = tx.GetLength();
 		if(w.IsPainting(0, y, sz.cx, fsz.cy)) {
 			Highlight ih;
-			ih.ink = color[IsShowEnabled() ? INK_NORMAL : INK_DISABLED];
-			ih.paper = color[IsReadOnly() || !IsShowEnabled() ? PAPER_READONLY : PAPER_NORMAL];
+			ih.ink = IsShowEnabled() ? style->inknorm : style->inkdis;
+			ih.paper = IsReadOnly() || !IsShowEnabled() ? style->paperrd : style->papernorm;
 			if(nobg)
 				ih.paper = Null;
 			ih.font = font;
@@ -106,13 +106,13 @@ void   LineEdit::Paint0(Draw& w) {
 			int h = selh > len ? len : selh;
 			if(l < h)
 				for(int i = l; i < h; i++) {
-					hl[i].paper = color[PAPER_SELECTED];
-					hl[i].ink = color[INK_SELECTED];
+					hl[i].paper = style->papersel;
+					hl[i].ink = style->inksel;
 				}
 			if(sell <= len && selh > len)
 				for(int i = len; i < hl.GetCount(); i++) {
-					hl[i].paper = color[PAPER_SELECTED];
-					hl[i].ink = color[INK_SELECTED];
+					hl[i].paper = style->papersel;
+					hl[i].ink = style->inksel;
 				}
 			Buffer<wchar> txt(ln);
 			for(int i = 0; i < ln; i++)
@@ -204,7 +204,7 @@ void   LineEdit::Paint0(Draw& w) {
 		selh -= len + 1;
 		pos += len + 1;
 	}
-	w.DrawRect(0, y, sz.cx, sz.cy - y, color[IsReadOnly() || !IsShowEnabled() ? PAPER_READONLY : PAPER_NORMAL]);
+	w.DrawRect(0, y, sz.cx, sz.cy - y, IsReadOnly() || !IsShowEnabled() ? style->paperrd : style->papernorm);
 	DrawTiles(w, DropCaret(), CtrlImg::checkers());
 }
 
