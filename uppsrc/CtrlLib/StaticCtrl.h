@@ -75,8 +75,6 @@ protected:
 
 public:
 	StaticRect& Background(const Value& chvalue);
-	StaticRect& Color(class Color c)                   { Background(c); return *this; }
-
 	Value GetBackground() const                        { return bg; }
 
 	StaticRect();
