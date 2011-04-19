@@ -107,6 +107,7 @@ protected:
 	int console_lock;
 	bool wrap_text;
 	FrameBottom<EditString> input;
+	TextCtrl::Style st;
 
 	void CheckEndGroup();
 	void FlushConsole();

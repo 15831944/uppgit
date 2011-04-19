@@ -16,7 +16,9 @@ Console::Console() {
 	console = false;
 	SetReadOnly();
 	NoHorzScrollbar();
-	SetColor(PAPER_READONLY, SColorPaper);
+	st = TextCtrl::StyleDefault();
+	st.paperrd = SColorPaper;
+	SetStyle(st);
 	input.Height(EditString::GetStdHeight());
 	input.SetFrame(Single<TopTextFrame>());
 	AddFrame(input);

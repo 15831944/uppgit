@@ -1047,12 +1047,14 @@ void  CodeEditor::SetHlStyle(int i, Color c, bool bold, bool italic, bool underl
 	st.bold = bold;
 	st.italic = italic;
 	st.underline = underline;
-	SetColor(LineEdit::INK_NORMAL, hl_style[INK_NORMAL].color);
-	SetColor(LineEdit::INK_DISABLED, hl_style[INK_DISABLED].color);
-	SetColor(LineEdit::INK_SELECTED, hl_style[INK_SELECTED].color);
-	SetColor(LineEdit::PAPER_NORMAL, hl_style[PAPER_NORMAL].color);
-	SetColor(LineEdit::PAPER_READONLY, hl_style[PAPER_READONLY].color);
-	SetColor(LineEdit::PAPER_SELECTED, hl_style[PAPER_SELECTED].color);
+	
+	style.inknorm = hl_style[INK_NORMAL].color;
+	style.inkdis = hl_style[INK_DISABLED].color;
+	style.inksel = hl_style[INK_SELECTED].color;
+	style.papernorm = hl_style[PAPER_NORMAL].color;
+	style.paperrd = hl_style[PAPER_READONLY].color;
+	style.papersel = hl_style[PAPER_SELECTED].color;
+	SetStyle(style);
 }
 
 void CodeEditor::LoadHlStyles(const char *s)
