@@ -394,7 +394,9 @@ public:
 	};
 
 private:
+
 	HlStyle  hl_style[HL_COUNT];
+	Style style; //TextCtrl
 
 public:
 	struct MouseTip {
