@@ -171,7 +171,7 @@ Pdb::Pdb()
 	AddReg("edi", &regs.edi);
 	AddReg("ebp", &regs.ebp);
 	AddReg("esp", &regs.esp);
-	regs.Color(SColorLtFace);
+	regs.Background(SColorLtFace);
 	regs.AddFrame(TopSeparatorFrame());
 	regs.AddFrame(RightSeparatorFrame());
 

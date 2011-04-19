@@ -28,9 +28,9 @@ Size MakeLogo(Ctrl& parent, Array<Ctrl>& ctrl)
 	v1.LeftPos(300, 100).BottomPos(20, 12);
 	v1.SetFont(Arial(10));
 	l.Add(v1);
-	parent.Add(ctrl.Create<StaticRect>().Color(White).SizePos());
+	parent.Add(ctrl.Create<StaticRect>().Background(White).SizePos());
 	parent.Add(l.TopPos(0, isz.cy).LeftPos(0, isz.cx));
-	parent.Add(ctrl.Create<StaticRect>().Color(Blue).LeftPos(2, isz.cx - 4).TopPos(isz.cy, 1));
+	parent.Add(ctrl.Create<StaticRect>().Background(Blue).LeftPos(2, isz.cx - 4).TopPos(isz.cy, 1));
 	RichTextView& w = ctrl.Create<RichTextView>();
 	w.SetQTF(GetTopic("ide/app/Sponsor$en-us"));
 	w.PageWidth(2900);
