@@ -775,10 +775,14 @@ const Display& ArrayCtrl::GetCellInfo(int i, int j, bool f0,
 	}
 	if(hasfocus)
 		st |= Display::FOCUS;
-	bg = i & 1 ? evenpaper : oddpaper;
 	if(nobg)
 		bg = Null;
-	fg = i & 1 ? evenink : oddink;
+	else
+		bg = i & 1 ? (!IsNull(evenpaper)?(evenpaper):(style->paper))
+			: (!IsNull(oddpaper)?(oddpaper):(style->paper));
+	fg = i & 1 ? (!IsNull(evenink)?(evenink):(style->ink))
+		: (!IsNull(oddink)?(oddink):(style->ink));
+
 	if((st & Display::SELECT) ||
 	    !multiselect && (st & Display::CURSOR) && !nocursor ||
 	    drop) {
@@ -791,6 +795,7 @@ const Display& ArrayCtrl::GetCellInfo(int i, int j, bool f0,
 
 Size  ArrayCtrl::DoPaint(Draw& w, bool sample) {
 	LTIMING("Paint");
+	Color gc = !IsNull(gridcolor)?(gridcolor):(style->gridcolor);
 	bool hasfocus0 = HasFocusDeep() || sample;
 	Size size = sample ? StdSampleSize() : GetSize();
 	Rect r;
@@ -841,10 +846,10 @@ Size  ArrayCtrl::DoPaint(Draw& w, bool sample) {
 						}
 					x += cw;
 					if(vertgrid)
-						w.DrawRect(x - 1, r.top, 1, r.Height(), gridcolor);
+						w.DrawRect(x - 1, r.top, 1, r.Height(), gc);
 				}
 				if(horzgrid)
-					w.DrawRect(0, r.bottom, size.cx, 1, gridcolor);
+					w.DrawRect(0, r.bottom, size.cx, 1, gc);
 				r.left = 0;
 				r.right = x;
 				if(i == cursor && !nocursor && multiselect && (GetSelectCount() != 1 || !IsSel(i)) && hasfocus0 && !isdrag)
@@ -2465,7 +2470,7 @@ void ArrayCtrl::Reset() {
 	selectcount = 0;
 	bains = 0;
 	row_name = t_("row");
-	gridcolor = SColorShadow;
+	gridcolor = Null;
 	autoappend = false;
 	focussetcursor = true;
 	sortcolumn = -1;
@@ -2787,8 +2792,9 @@ ArrayCtrl::ArrayCtrl() {
 	WhenAcceptRow = true;
 	WhenBar = THISBACK(StdBar);
 	SetFrame(ViewFrame());
-	oddpaper = evenpaper = SColorPaper;
-	oddink = evenink = SColorText;
+	oddpaper = evenpaper = Null;
+	oddink = evenink = Null;
+	style = &StyleDefault();
 }
 
 ArrayCtrl::~ArrayCtrl() {}
@@ -2888,6 +2894,21 @@ void ArrayOption::Paint(Draw& w, const Rect& r, const Value& q,
 
 	Point p = cr.CenterPos(img.GetSize());
 	w.DrawImage(p.x, p.y, img);
+}
+
+ArrayCtrl& ArrayCtrl::SetStyle(const Style& s)
+{
+	style = &s;
+	Refresh();
+	SyncInfo();
+	return *this;
+}
+
+CH_STYLE(ArrayCtrl, Style, StyleDefault)
+{
+	paper = SColorPaper;
+	ink = SColorText;
+	gridcolor = SColorShadow;
 }
 
 END_UPP_NAMESPACE

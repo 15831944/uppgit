@@ -37,6 +37,11 @@ public:
 	virtual void  ChildLostFocus();
 	virtual void  Serialize(Stream& s);
 
+	struct Style : ChStyle<Style> {
+		Color  gridcolor;
+		Color  paper, ink;
+	};
+
 public:
 	struct IdInfo {
 		Value           insertval;
@@ -241,6 +246,8 @@ private:
 
 	bool  isdrag:1;
 	bool  selclick:1;
+
+	const Style *style;
 
 	int    Pos(int np) const;
 
@@ -634,6 +641,8 @@ public:
 	ArrayCtrl& SetScrollBarStyle(const ScrollBar::Style& s)   { sb.SetStyle(s); header.SetScrollBarStyle(s); return *this; }
 	ArrayCtrl& SetHeaderCtrlStyle(const HeaderCtrl::Style& s) { header.SetStyle(s); return *this; }
 
+	static const Style& StyleDefault();
+	ArrayCtrl&  SetStyle(const Style& s);
 
 	void Reset();
 
