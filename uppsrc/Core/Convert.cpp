@@ -57,6 +57,24 @@ uint64 stou64(const char *s, void *endptr, unsigned base)
 	return value;
 }
 
+uint64 stou64(const wchar *s, void *endptr, unsigned base)
+{
+	ASSERT(base >= 2 && base <= 36);
+	unsigned digit = ctoi(*s);
+	if(digit >= base)
+	{ // error
+		if(endptr)
+			*(const wchar **)endptr = s;
+		return ~0;
+	}
+	uint64 value = digit;
+	while((digit = ctoi(*++s)) < base)
+		value = value * base + digit;
+	if(endptr)
+		*(const wchar **)endptr = s;
+	return value;
+}
+
 int ScanInt(const char *ptr, const char **endptr, int base)
 {
 	const char *s = ptr;
@@ -90,6 +108,21 @@ int ScanInt(const wchar *ptr, const wchar **endptr, int base)
 int64 ScanInt64(const char *ptr, const char **endptr, int base)
 {
 	const char *s = ptr;
+	bool minus = false;
+	while(*s && *s <= ' ')
+		s++;
+	if(*s == '+' || *s == '-')
+		minus = (*s++ == '-');
+	uint64 u = stou64(s, endptr, base);
+	if(~u)
+		return (minus ? -(int64)u : (int64)u);
+	else
+		return Null;
+}
+
+int64 ScanInt64(const wchar *ptr, const wchar **endptr, int base)
+{
+	const wchar *s = ptr;
 	bool minus = false;
 	while(*s && *s <= ' ')
 		s++;
