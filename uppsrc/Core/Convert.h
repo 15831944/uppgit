@@ -9,12 +9,14 @@ int           ScanInt(const char *ptr, const char **endptr = NULL, int radix = 1
 int           ScanInt(const wchar *ptr, const wchar **endptr = NULL, int radix = 10);
 
 int64         ScanInt64(const char *ptr, const char **endptr = NULL, int base = 10);
+int64         ScanInt64(const wchar *ptr, const wchar **endptr = NULL, int base = 10);
 
 double        ScanDouble(const char *ptr, const char **endptr = NULL, bool accept_comma = true);
 double        ScanDouble(const wchar *ptr, const wchar **endptr = NULL, bool accept_comma = true);
 
 Value         StrIntValue(const char *s);
 inline int    StrInt(const char* s) { return ScanInt(s); }
+inline int64  StrInt64(const char* s){return ScanInt64(s); }
 inline double IntDbl(int i)         { return IsNull(i) ? double(Null) : double(i); }
 inline int    DblInt(double d)      { return IsNull(d) ? int(Null) : fround(d); }
 Value         StrDblValue(const char* s);
