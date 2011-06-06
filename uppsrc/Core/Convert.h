@@ -72,6 +72,8 @@ const ConvertInt& StdConvertInt();
 const ConvertInt& StdConvertIntNotNull();
 
 struct ConvertInt64 : public ConvertInt {
+	virtual Value Scan(const Value& text) const;
+
 	ConvertInt64& MinMax(int64 _min, int64 _max)    { minval = _min; maxval = _max; return *this; }
 	ConvertInt64& Min(int64 _min)                   { minval = _min; return *this; }
 	ConvertInt64& Max(int64 _max)                   { maxval = _max; return *this; }

@@ -372,16 +372,21 @@ Value ConvertInt::Scan(const Value& text) const {
 	if(IsError(v)) return v;
 	if(IsNull(v)) return notnull ? NotNullError() : v;
 	int64 m = v;
-	if(m >= minval && m <= maxval)
-		if(m >= INT_MIN && m <= INT_MAX)
-			return (int)m;
-		else
-			return v;
+	if(m >= minval && m <= maxval) return int(m);
 	return ErrorValue(UPP::Format(t_("Number must be between %d and %d."), minval, maxval));
 }
 
 int   ConvertInt::Filter(int chr) const {
 	return minval >= 0 ? CharFilterDigit(chr) : CharFilterInt(chr);
+}
+
+Value ConvertInt64::Scan(const Value& text) const {
+	Value v = UPP::Scan(INT64_V, text);
+	if(IsError(v)) return v;
+	if(IsNull(v)) return notnull ? NotNullError() : v;
+	int64 m = v;
+	if(m >= minval && m <= maxval) return v;
+	return ErrorValue(UPP::Format(t_("Number must be between %d and %d."), minval, maxval));
 }
 
 Value ConvertDouble::Format(const Value& q) const
