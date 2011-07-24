@@ -134,8 +134,8 @@ when user holds mouse button over Pusher `- it emulates keyboard
 autorepeat (e.g. arrow buttons in scrollbar).&]
 [s3; &]
 [s4; &]
-[s5;:Pusher`:`:ClickFocus`(bool`): [@(0.0.255) virtual] [_^Pusher^ Pusher][@(0.0.255) `&]_[* C
-lickFocus]([@(0.0.255) bool]_[*@3 cf]_`=_[@(0.0.255) true])&]
+[s5;:Pusher`:`:ClickFocus`(bool`): [_^Pusher^ Pusher][@(0.0.255) `&]_[* ClickFocus]([@(0.0.255) b
+ool]_[*@3 cf]_`=_[@(0.0.255) true])&]
 [s2;%% If [%-*@3 cf] is true, Pusher will get focused on a mouse click.&]
 [s7;%% [*@3 cf]-|click focusing&]
 [s7;%% [*/ Return value]-|`*this for method chaining.&]
