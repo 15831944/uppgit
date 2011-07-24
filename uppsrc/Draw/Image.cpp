@@ -111,6 +111,27 @@ ImageBuffer::ImageBuffer(ImageBuffer& b)
 	spot2 = b.spot2;
 }
 
+ImageBuffer::ImageBuffer(Buffer<RGBA>& pb, Size sz) {
+	ASSERT(sz.cx >= 0 && sz.cy >= 0);
+	size = sz;
+	pixels = pb;
+#ifdef _DEBUG
+	RGBA *s = pixels;
+	RGBA *e = pixels + GetLength();
+	byte  a = 0;
+	while(s < e) {
+		s->a = a;
+		a = ~a;
+		s->r = 255;
+		s->g = s->b = 0;
+		s++;
+	}
+#endif
+	kind = IMAGE_UNKNOWN;
+	spot2 = hotspot = Point(0, 0);
+	dots = Size(0, 0);
+}
+
 void ImageBuffer::SetDPI(Size dpi) 
 {
 	dots.cx = int(600.*size.cx/dpi.cx);

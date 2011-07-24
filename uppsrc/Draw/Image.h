@@ -117,6 +117,7 @@ public:
 	ImageBuffer()                       { Create(0, 0); }
 	ImageBuffer(int cx, int cy)         { Create(cx, cy); }
 	ImageBuffer(Size sz)                { Create(sz.cx, sz.cy); }
+	ImageBuffer(Buffer<RGBA>& pb, Size sz);
 	ImageBuffer(Image& img);
 	ImageBuffer(ImageBuffer& b);
 // BW, defined in CtrlCore:
