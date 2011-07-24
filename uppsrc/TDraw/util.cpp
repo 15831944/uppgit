@@ -333,7 +333,7 @@ static void DrawDragDropRectRaw(Draw& draw, const Rect& rc, HBRUSH brush, int wi
 }
 #endif
 
-#ifdef PLATFORM_X11
+#ifdef GUI_X11
 static void DrawDragDropRectRaw(Draw& draw, const Rect& rc, int width)
 {
 	Size size = rc.Size();
@@ -373,7 +373,7 @@ void DrawDragDropRect(Draw& draw, const Rect& rc_old, const Rect& rc_new, int wi
 	}
 #endif
 #endif
-#ifdef PLATFORM_X11
+#ifdef GUI_X11
 	XGCValues gcv_old, gcv_new;
 	XGetGCValues(Xdisplay, draw.GetGC(), GCForeground | GCFunction, &gcv_old);
 	gcv_new.function = X11_ROP2_XOR;
@@ -600,7 +600,7 @@ void DrawPolyPolyline(Draw& draw, const Point *vertices, int vertex_count,
 	}
 	if(is_xor)
 		SetROP2(draw, R2_COPYPEN);
-#elif defined(PLATFORM_X11)
+#elif defined(GUI_X11)
 	XGCValues gcv_old, gcv_new;
 	XGetGCValues(Xdisplay, draw.GetGC(), GCForeground | GCLineWidth | GCFunction, &gcv_old);
 	gcv_new.function = is_xor ? X11_ROP2_COPY : X11_ROP2_XOR;
@@ -797,7 +797,7 @@ static void DrawPolyPolygonRaw(Draw& draw, const Point *vertices, int vertex_cou
 	}
 #endif
 }
-#elif defined(PLATFORM_X11)
+#elif defined(GUI_X11)
 static void FillPolyPolygonRaw(GC gc, Drawable drawable, Rect clip, Point offset,
 	const Point *vertices, int vertex_count,
 	const int *subpolygon_counts, int subpolygon_count_count)
@@ -852,7 +852,7 @@ static void DrawPolyPolygonRaw(GC gc, Drawable drawable, Point offset,
 #endif
 
 /*
-#ifdef PLATFORM_X11
+#ifdef GUI_X11
 Pixmap GetPatternPixmap(int64 pattern)
 {
 	static VectorMap<int64, Image> cache;
@@ -922,7 +922,7 @@ void DrawPolyPolyPolygon(Draw& draw, const Point *vertices, int vertex_count,
 //	TIMING("DrawPolyPolygon/hdc");
 	bool is_xor = !IsNull(doxor);
 
-#ifdef PLATFORM_X11
+#ifdef GUI_X11
 	unsigned xor_pixel = (is_xor ? GetXPixel(doxor) : 0);
 	XGCValues gcv;
 	gcv.function = is_xor ? X11_ROP2_XOR : X11_ROP2_COPY;
@@ -1045,7 +1045,7 @@ void DrawPolyPolyPolygon(Draw& draw, const Point *vertices, int vertex_count,
 	#ifdef SYSTEMDRAW
 		}
 	#endif
-#elif defined(PLATFORM_X11)
+#elif defined(GUI_X11)
 		if(fill_gc)
 			FillPolyPolygonRaw(fill_gc, draw.GetDrawable(), draw.GetClip(), draw.GetOffset(),
 				vertices, poly, subpolygon_counts, sub);
@@ -1059,7 +1059,7 @@ void DrawPolyPolyPolygon(Draw& draw, const Point *vertices, int vertex_count,
 		subpolygon_counts += sub;
 	}
 
-#ifdef PLATFORM_X11
+#ifdef GUI_X11
 	if(fill_gc)
 		XFreeGC(Xdisplay, fill_gc);
 	if(line_gc)
@@ -1181,7 +1181,7 @@ void DrawEllipse(Draw& draw, const Rect& rc, Color color, Color outline, int out
 	draw.SetDrawPen(outline_width, outline);
 	draw.SetColor(color);
 	DrawEllipse(draw, rc);
-#elif defined(PLATFORM_X11)
+#elif defined(GUI_X11)
 	XGCValues gcv, gcv_old;
 	enum { GC_BACKUP = GCForeground | GCArcMode | GCLineWidth };
 	XGetGCValues(Xdisplay, draw.GetGC(), GC_BACKUP, &gcv_old);
@@ -1244,7 +1244,7 @@ void DrawArc(Draw& draw, const Rect& rc, Point start, Point end, Color color, in
 #if defined(PLATFORM_WIN32)
 	draw.SetDrawPen(width, color);
 	DrawArc(draw.GetHandle(), rc, start, end);
-#elif defined(PLATFORM_X11)
+#elif defined(GUI_X11)
 	XGCValues gcv, gcv_old;
 	XGetGCValues(Xdisplay, draw.GetGC(), GCForeground, &gcv_old);
 	Point offset = draw.GetOffset();
