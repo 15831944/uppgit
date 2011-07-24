@@ -322,6 +322,9 @@ public:
 	~ImageDraw();
 };
 
+void DrawDragRect(SystemDraw& w, const Rect& rect1, const Rect& rect2, const Rect& clip, int n,
+                  Color color, uint64 pattern);
+
 END_UPP_NAMESPACE
 
 #define GUIPLATFORM_KEYCODES_INCLUDE "Win32Keys.h"
