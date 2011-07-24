@@ -1,5 +1,6 @@
 //$ class Ctrl {
 private:
+public:
 	static Ptr<Ctrl>      desktop;
 	static Vector<Ctrl *> topctrl;
 	static ImageBuffer    framebuffer;

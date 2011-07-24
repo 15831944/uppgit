@@ -225,6 +225,7 @@ void FBUpdate(const Rect& inv)
 {
 	if(switched_away) return; //backdraw
 	//FIXME accelerate
+	return;
 	const ImageBuffer& framebuffer = Ctrl::GetFrameBuffer();
 	memcpy(fbp, ~framebuffer, framebuffer.GetLength() * sizeof(RGBA));
 }
@@ -265,8 +266,11 @@ void FBInit(const String& fbdevice)
 	}
 	LLOG("The framebuffer device was mapped to memory successfully.\n");
 
-	Size fbsz(vinfo.xres, vinfo.yres);
-	Ctrl::SetFramebufferSize(fbsz);
+	Size sz(vinfo.xres, vinfo.yres);
+//	Ctrl::SetFramebufferSize(sz);
+	Buffer<RGBA> b((RGBA*)fbp, sizeof(RGBA)*sz.cx*sz.cy);
+	ImageBuffer ib(b, sz);
+	Ctrl::framebuffer = ib;
 
 	//mouse
 
