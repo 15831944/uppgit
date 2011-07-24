@@ -75,7 +75,7 @@ void FBUpdate(const Rect& inv)
 	//The invalidated areas accumulate in the update region until the region is processed when the next WM_PAINT message occurs
 	const ImageBuffer& framebuffer = Ctrl::GetFrameBuffer();
 
-#if 1
+#if 0
 	memcpy(screen->pixels, ~framebuffer, framebuffer.GetLength() * sizeof(RGBA));
 #endif
 
@@ -131,7 +131,12 @@ void FBInit()
 
 	screen = CreateScreen(width, height, bpp, videoflags);
 	ASSERT(screen);
-	Ctrl::SetFramebufferSize(Size(width, height));
+//	Ctrl::SetFramebufferSize(Size(width, height));
+//return;
+	Size sz(width, height);
+	Buffer<RGBA> b((RGBA*)screen->pixels, sizeof(RGBA)*sz.cx*sz.cy);
+	ImageBuffer ib(b, sz);
+	Ctrl::framebuffer = ib;
 }
 
 void FBDeInit()
