@@ -65,7 +65,7 @@ GUI_APP_MAIN
 {
 	TopWindow  win;
 	StaticRect ctrl;
-	ctrl.Color(SLtCyan);
+	ctrl.Background(SLtCyan);
 	win.Add(ctrl.SizePos());
 	win.SetRect(0, 0, 100, 100);
 	win.Run();

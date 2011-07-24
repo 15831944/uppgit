@@ -7,7 +7,7 @@ public:
 	OptionDisplay()
 	{
 		StaticRect wnd;
-		wnd.Color(::SColorPaper());
+		wnd.Background(SColorPaper());
 		Option f;
 
 		wnd.SetRect( Rect(Point(0, 0), f.GetStdSize()) );
