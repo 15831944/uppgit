@@ -72,7 +72,7 @@
 		#define CPU_BE 1
 		#define CPU_BIG_ENDIAN 1
 		#define CPU_ALIGNED 1
-	#elif __arm // ToDo!
+	#elif __arm || __arm__ || arm // ToDo!
 		#define CPU_32 1
 		#define CPU_ARM 1
 		#define CPU_LE 1
