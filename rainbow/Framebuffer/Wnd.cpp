@@ -54,7 +54,7 @@ void Ctrl::InitFB()
 	ChStdSkin();
 
 	static StaticRect x;
-	x.Color(Cyan());
+	x.Background(Cyan());
 	SetDesktop(x);
 }
 
