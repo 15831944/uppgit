@@ -75,7 +75,7 @@ struct App : public Ctrl {
 		
 		popup2.SetRect(500, 50, 300, 400);
 		popup2.SetFrame(BlackFrame());
-		popup2.Color(Magenta());
+		popup2.Background(Magenta());
 		
 		win.Title("Title of the window !");
 		

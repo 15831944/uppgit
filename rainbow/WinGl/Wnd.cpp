@@ -78,7 +78,7 @@ void Ctrl::InitGl()
 	Ctrl::InitTimer();
 	ChStdSkin();
 	static StaticRect x;
-	x.Color(Cyan());
+	x.Background(Cyan());
 	SetDesktop(x);
 }
 
