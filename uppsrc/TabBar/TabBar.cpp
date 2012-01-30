@@ -324,9 +324,19 @@ TabBar::TabBar()
 	groupsorter = &Single<TabGroupSort>();
 	stacksorter = &stacksorter_inst;
 
+	style = &StyleDefault();
+
 	SetAlign(TOP);
 	SetFrameSize(GetHeight(false));
 	BackPaint();
+}
+
+TabBar& TabBar::SetStyle(const Style& s)
+{
+	style = &s;
+	RefreshLayout();
+	RefreshFrame();
+	return *this;
 }
 
 void TabBar::Set(const TabBar& t)
@@ -945,7 +955,7 @@ void TabBar::PaintTabItems(Tab& t, Draw &w, const Rect& rn, int align)
 void TabBar::PaintTab(Draw &w, const Size &sz, int n, bool enable, bool dragsample)
 {
 	TabBar::Tab &t = tabs[n];
-	const Style& s = GetStyle();
+	const Style& s = *style;
 	int align = GetAlign();
 	int cnt = dragsample ? 1 : tabs.GetCount();
 	
@@ -1112,8 +1122,8 @@ void TabBar::Paint(Draw &w)
 			int x = separators[i];
 			if (x > sc.GetPos() && x < limt) {
 				// Paint separator
-				ChPaint(w, Rect(Fixed(Point(x - sc.GetPos() + GetStyle().sel.left, 0)), 
-					Fixed(Size(TB_SPACE - GetStyle().sel.left, cy-1))), 
+				ChPaint(w, Rect(Fixed(Point(x - sc.GetPos() + style->sel.left, 0)), 
+					Fixed(Size(TB_SPACE - style->sel.left, cy-1))), 
 					st.group_separators[IsVert() ? 1 : 0]);						
 			}
 		}
@@ -1207,7 +1217,7 @@ int TabBar::GetWidth(int n)
 
 int TabBar::GetExtraWidth()
 {
-	return TB_MARGIN * 2 + (TB_SPACE + GetStyle().crosses[0].GetSize().cx) * crosses;	
+	return TB_MARGIN * 2 + (TB_SPACE + style->crosses[0].GetSize().cx) * crosses;
 }
 
 Size TabBar::GetStdSize(const Value &q)
@@ -1215,16 +1225,16 @@ Size TabBar::GetStdSize(const Value &q)
 	if (display)
 		return display->GetStdSize(q);
 	else if (q.GetType() == STRING_V || q.GetType() == WSTRING_V)
-		return GetTextSize(WString(q), GetStyle().font);
+		return GetTextSize(WString(q), style->font);
 	else
-		return GetTextSize("A Tab", GetStyle().font);	
+		return GetTextSize("A Tab", style->font);
 }
 
 Size TabBar::GetStackedSize(const Tab &t)
 {
 	if (!IsNull(t.img))
 		return t.img.GetSize();
-	return GetTextSize("...", GetStyle().font, 3);
+	return GetTextSize("...", style->font, 3);
 }
 
 Size TabBar::GetStdSize(const Tab &t)
@@ -1254,7 +1264,7 @@ TabBar& TabBar::InsertKey(int ix, const Value &key, const Value &value, Image ic
 	SortTabs0();
 	MakeGroups();	
 	Repos();
-	active = -1;
+	//active = -1;
 	if (make_active || (!allownullcursor && active < 0)) 
 		SetCursor((groupsort || stacking) ? FindId(id) : ( minmax(ix, 0, tabs.GetCount() - 1)));		
 	return *this;	
@@ -1329,10 +1339,9 @@ int TabBar::GetHeight(bool scrollbar) const
 	return TabBar::GetStyleHeight() + TB_SBSEPARATOR * int(scrollbar);
 }
 
-int TabBar::GetStyleHeight()
+int TabBar::GetStyleHeight() const
 {
-	const Style& s = GetStyle();
-	return s.tabheight + s.sel.top;
+	return style->tabheight + style->sel.top;
 }
 
 void TabBar::Repos()

@@ -68,7 +68,7 @@ Size FileTabs::GetStackedSize(const Tab &t)
 		return min(t.img.GetSize(), Size(TB_ICON, TB_ICON)) + Size(TB_SPACEICON, 0) + 5;
 	String s = t.value;
 	s = GetFileExt(s);
-	return GetTextSize(s.ToWString(), GetStyle().font) + Size(TB_SPACEICON, 0);
+	return GetTextSize(s.ToWString(), style->font) + Size(TB_SPACEICON, 0);
 }
 
 void FileTabs::Serialize(Stream& s)
