@@ -236,6 +236,8 @@ protected:
 	int 			active;
 	int             id;
 
+	const Style *style;
+
 	int highlight;
 	int drag_highlight;
 	int target;
@@ -288,7 +290,6 @@ protected:
 	int 	GetExtraWidth();
 	int 	GetWidth() const;
 	int 	GetHeight(bool scrollbar = true) const;
-
 	bool	SetCursor0(int n, bool action = false);
 
 	void 	DoStacking();
@@ -305,7 +306,7 @@ protected:
 	int   	GetNextId();
 	int   	GetScrollPos() 				{ return sc.GetPos(); }		
 	
-	static int GetStyleHeight();
+	int GetStyleHeight() const;
 	static Image AlignImage(int align, const Image& img);
 	static Value AlignValue(int align, const Value& v, const Size& isz);
 	
@@ -400,14 +401,25 @@ public:
 	void 	Clear();
 
 	TabBar& Crosses(bool b = true, int side = RIGHT);
+	bool IsCrosses() const                  { return crosses; }
 	TabBar& Stacking(bool b = true);
+	bool IsStacking() const                 { return stacking; }
 	TabBar& Grouping(bool b = true);
+	bool IsGrouping() const                 { return grouping; }
 	TabBar& ContextMenu(bool b = true);
+	bool IsContextMenu() const              { return contextmenu; }
 	TabBar& GroupSeparators(bool b = true);
+	bool IsGroupSeparators() const          { return groupseps; }
+	bool	HasGroupSeparators() const		{ return separators; }
 	TabBar& AutoScrollHide(bool b = true);
+	bool IsAutoScrollHide() const           { return autoscrollhide; }
 	TabBar& InactiveDisabled(bool b = true);
+	bool IsInactiveDisabled() const         { return inactivedisabled; }
+	bool	IsShowInactive() const			{ return inactivedisabled; } //BUG?
 	TabBar& AllowNullCursor(bool b = true);
+	bool IsAllowNullCursor() const          { return allownullcursor; }
 	TabBar& Icons(bool v = true);
+	bool IsIcons() const                    { return icons; }
 
 	TabBar& SortTabs(bool b = true);
 	TabBar& SortTabsOnce();
@@ -435,12 +447,8 @@ public:
 	bool	IsGroupSort() const				{ return groupsort; }
 	bool	IsStackSort() const				{ return stacksort; }
 
-	TabBar&	AllowReorder(bool v = true)				{ allowreorder = v; return *this; }
-	
-	bool	IsGrouping() const				{ return grouping; }
-	bool	HasGroupSeparators() const		{ return separators; }
-	bool	IsStacking() const				{ return stacking; }
-	bool	IsShowInactive() const			{ return inactivedisabled; }
+	TabBar&	AllowReorder(bool v = true)     { allowreorder = v; return *this; }
+	bool    IsAllowReorder() const          { return allowreorder; }
 	
 	TabBar& NeverEmpty()					{ return MinTabCount(1); }
 	TabBar& MinTabCount(int cnt)			{ mintabcount = max(cnt, 0); Refresh(); return *this; }
@@ -486,6 +494,8 @@ public:
 	bool   	HasHighlight() const			{ return highlight >= 0; }
 	int    	GetCount() const 				{ return tabs.GetCount(); }
 
+	int     GetTabsHeight() const           { return GetHeight(false); }
+
 	void   	SetCursor(int n);
 	void	KillCursor()					{ SetCursor(-1); Refresh(); }	
 
@@ -500,11 +510,12 @@ public:
 	TabBar&		  	CopySettings(const TabBar& src);
 	virtual void    Serialize(Stream& s);
 	
-	static const Style& 	GetStyle() 						{ return StyleDefault(); }	
+//	static const Style& 	GetStyle() 						{ return StyleDefault(); }	
 
 	virtual void 	ContextMenu(Bar& bar);
 	
 	static const Style& StyleDefault();
+	TabBar& SetStyle(const Style& s);
 };
 
 #include "FileTabs.h"
