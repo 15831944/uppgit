@@ -227,7 +227,7 @@ Gdb_MI2::Gdb_MI2()
 	AddReg(RPREFIX "di", &regs.rdi);
 	AddReg(RPREFIX "bp", &regs.rbp);
 	AddReg(RPREFIX "sp", &regs.rsp);
-	regs.Color(SColorLtFace);
+	regs.Color(SColorLtFace());
 	regs.AddFrame(TopSeparatorFrame());
 	regs.AddFrame(RightSeparatorFrame());
 
